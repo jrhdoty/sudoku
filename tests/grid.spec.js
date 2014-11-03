@@ -1,7 +1,7 @@
-var Grid = require('../app/scripts/grid.js');
+var Grid = require('../app/scripts/src/grid.js');
 
 describe('correctly loaded Grid module', function(){
   it('should correctly load grid module', function(){
-    expect(Grid()).to.equal('hello world');
+    expect(typeof Grid).to.equal('function');
   });
 });
