@@ -3,6 +3,7 @@ var eventMixin = require('./events.js');
 var Model = function(data){
   this.data = data || {};
   eventMixin(this);
+  this.initialize();
 };
 
 Model.prototype.set = function(key, val){
@@ -15,8 +16,13 @@ Model.prototype.get = function(key){
   return this.data[key];
 };
 
+Model.prototype.initialize = function(){
+  void 0;
+};
+
 //allow for extension of model
 Model.extend = function(config){
+
   var that = this;
 
   //setup prototypal inheritence
