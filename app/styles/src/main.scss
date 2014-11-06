@@ -1,0 +1,14 @@
+body {
+  width:100%;
+  height:100%;
+}
+
+.sudoku-box {
+  border-width: 2px;
+  border-color: black;
+  background-color: blue;
+}
+
+.conflict {
+  background-color: red;
+}
