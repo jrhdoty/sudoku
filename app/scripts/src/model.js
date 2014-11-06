@@ -22,7 +22,7 @@ Model.prototype.initialize = function(){
 
 //allow for extension of model
 Model.extend = function(config){
-
+  config = config || {};
   var that = this;
 
   //setup prototypal inheritence
