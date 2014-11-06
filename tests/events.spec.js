@@ -5,7 +5,9 @@ describe('eventMixin', function(){
 
   beforeEach(function(){
     obj = {};
+
     eventMixin(obj);
+
     cb = function(){
       state = true;
     };
@@ -32,5 +34,21 @@ describe('eventMixin', function(){
     obj.remove('changed', cb);
     obj.trigger('changed');
     expect(state).to.equal(false);
+  });
+
+  it('should call registered callbacks within the correct context', function(){
+    var objectWithState = {
+      state: false,
+      change: function(){
+        this.state = !this.state;
+      }
+    };
+
+    obj.on('changed', objectWithState.change, objectWithState);
+    expect(objectWithState.state).to.equal(false);
+    obj.trigger('changed');
+    expect(objectWithState.state).to.equal(true);
+
+
   });
 });
