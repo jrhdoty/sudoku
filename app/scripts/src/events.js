@@ -14,9 +14,10 @@ var eventMixin = function(obj){
   };
 
   obj.trigger = function(event){
+    var args = Array.prototype.slice(arguments, 1);
     if( this.events[event] ){
       _.forEach(this.events[event], function(registered){
-        registered[0].call(registered[1]);
+        registered[0].apply(registered[1], args);
       });
     }
   };
