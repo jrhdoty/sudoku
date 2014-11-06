@@ -47,11 +47,11 @@ gulp.task('inject', function(){
     relative: false
   }))
 
-  .pipe($.inject(scripts, {
+  .pipe($.inject(vendor, {
     ignorePath: 'app',
     addRootSlash: false, 
     name: 'vendor', 
-    relative: false
+    relative: true
   }))
 
   .pipe($.inject(styles, {
@@ -83,12 +83,12 @@ gulp.task('tdd', function(done){
 
 //watch changes to source files
 gulp.task('watch', function(){
-  gulp.watch(paths.app_files.scripts, ['lint', 'browserify']);
-  gulp.watch(paths.app_files.styles, ['sass']);
+  gulp.watch(paths.app_files.scripts, ['lint', 'browserify', 'inject']);
+  gulp.watch(paths.app_files.styles, ['sass', 'inject']);
 });
 
 //build files
-gulp.task('build', ['sass', 'blint', 'browserify']);
+gulp.task('build', ['sass', 'lint', 'browserify', 'inject']);
 
 //default is to build and watch
 gulp.task('default', ['build', 'watch']);
