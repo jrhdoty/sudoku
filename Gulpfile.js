@@ -21,14 +21,48 @@ gulp.task('browserify', function(){
   return browserify(paths.app_files.index)
   .bundle()
   .pipe(source('bundle.js'))
-  .pipe(gulp.dest(paths.build.scripts));
+  .pipe(gulp.dest(paths.build.scripts_dir));
 });
 
 //compile sass files
 gulp.task('sass', function(){
   return gulp.src(paths.app_files.styles)
     .pipe($.sass())
-    .pipe(gulp.dest(paths.build.styles));
+    .pipe(gulp.dest(paths.build.styles_dir));
+});
+
+
+//inject files into index.html
+gulp.task('inject', function(){
+  var scripts = gulp.src(paths.build.bundle, {read:false}),
+      styles = gulp.src(paths.build.styles, {read:false}),
+      vendor = gulp.src(paths.vendor_files.scripts, {read:false}),
+      target = gulp.src(paths.build.html);
+
+  return target
+  .pipe($.inject(scripts, {
+    ignorePath: 'app',
+    addRootSlash: false, 
+    name: 'scripts', 
+    relative: false
+  }))
+
+  .pipe($.inject(scripts, {
+    ignorePath: 'app',
+    addRootSlash: false, 
+    name: 'vendor', 
+    relative: false
+  }))
+
+  .pipe($.inject(styles, {
+    ignorePath: 'app',
+    addRootSlash: false, 
+    name: 'styles', 
+    relative: false
+  }))
+
+  .pipe(gulp.dest(paths.app_files.dir));
+
 });
 
 //run tests once
@@ -38,6 +72,7 @@ gulp.task('test', function(done){
     singleRun: true
   });
 });
+
 
 //run tests on every file change
 gulp.task('tdd', function(done){
