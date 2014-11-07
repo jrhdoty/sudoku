@@ -1,13 +1,14 @@
 'use strict';
-var Grid     = require('./grid.js'),
-    GridView = require('./gridView.js');
+var Game    = require('./game.js'),
+    GameView = require('./gameView.js');
 
 (function(){
   $(document).ready(function(){
-    var grid     = new Grid();
-    grid.newGame(25);
-    var gridView = new GridView({model: grid});
+    var game     = new Game({});
+    game.reset();
 
-    $('.sudoku').append(gridView.render());
+    var gameView = new GameView({model: game});
+
+    $('.sudoku').append(gameView.render());
   });
 })();
