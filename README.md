@@ -46,3 +46,9 @@ Gulp was used for performing all of the build and debugging tasks for this appli
 
 ##Styling
 Styles were written with SASS to allow for the use of mixins and variables and compiled to css with a gulp sass task
+
+##To-Do
+- Code cleanup/refactor
+- extend View class to more effectively handle registration of DOM events
+- Notify user when the game has been won
+- Random board generator
