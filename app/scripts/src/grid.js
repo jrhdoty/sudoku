@@ -8,6 +8,7 @@ var Grid = Model.extend({
     this.set('boxes', this.createGrid(this.dim));
     this.set('rowConflicts', []);
     this.set('colConflicts', []);
+    this.set('quadrantConflicts', []);
   },
 
   createGrid : function(dim){
@@ -29,6 +30,10 @@ var Grid = Model.extend({
     this.trigger('changed');
     this.checkRows();
     this.checkColumns();
+    this.checkQuadrants();
+    if (this.hasWon()){
+      this.won();
+    }
   },
 
   checkRows: function(){
@@ -89,6 +94,7 @@ var Grid = Model.extend({
   setColumnConflicts: function(){
     var conflicts = this.get('colConflicts'),
         boxes     = this.get('boxes');
+
     _.forEach(boxes, function(row, rowIdx){
       _.forEach(row, function(box, colIdx){
         var conflict = _.contains(conflicts, colIdx);
@@ -97,6 +103,67 @@ var Grid = Model.extend({
     });
   },
 
+
+  checkQuadrants: function(){
+    var values, 
+        value,
+        conflict,
+        oldConflicts = this.get('quadrantConflicts'),
+        newConflicts = [],
+        boxes     = this.get('boxes');
+
+    var cb = function(box, x, y){
+      value = box.get('value');
+      if(values[value]){
+        conflict = true;
+      } else if (value !== ''){
+        values[value] = true;
+      }
+    };
+
+    for(var i = 0; i < boxes.length; i+=3){
+      for(var j = 0; j < boxes.length; j+=3){
+        values = {};
+        conflict = false;
+        this.iterateOverQuadrant(j, i, cb);
+        if (conflict){
+          newConflicts.push(Math.floor(i/3)*3+Math.floor(j/3));
+        }
+      }
+    }
+
+    if(!helpers.compareArrays(oldConflicts, newConflicts)){
+      this.set('quadrantConflicts', newConflicts);
+      this.setQuadrantConflicts();
+    }
+  },
+
+
+  setQuadrantConflicts: function(){
+    var conflicts = this.get('quadrantConflicts'),
+        conflict,
+        boxes = this.get('boxes');
+
+    var cb = function(box, x, y){
+      box.set('conflict', conflict);
+    };
+
+    for(var i = 0; i < boxes.length; i+=3){
+      for(var j = 0; j < boxes.length; j+=3){
+        conflict = _.contains(conflicts, Math.floor(i/3)*3+Math.floor(j/3));
+        this.iterateOverQuadrant(j, i, cb);
+      }
+    }
+  },
+
+  iterateOverQuadrant: function(x, y, cb){
+    var boxes = this.get('boxes');
+    for ( var i = y; i < y+3; i++ ){
+      for (var j = x; j< x+3; j++ ){
+        cb(boxes[i][j], j, i);
+      }
+    }
+  },
 
   board:  [[5, 3, 4, 6, 7, 8, 9, 1, 2], 
            [6, 7, 2, 1, 9, 5, 3, 4, 8], 
@@ -113,12 +180,53 @@ var Grid = Model.extend({
         range = _.shuffle(_.range(0, 81)),
         row,
         col;
+    this.clearBoxes();
     for( var i = 0; i < num; i++ ){
       row = Math.floor(range[i]/9);
       col = range[i]-(row*9);
       boxes[row][col].set('value', this.board[row][col]);
+      boxes[row][col].set('mutable', false);
+    }
+  },
+
+  hasWon: function(){
+    var numConflicts = 
+      this.get('quadrantConflicts').length +
+      this.get('rowConflicts').length +
+      this.get('colConflicts').length;
+
+    if(numConflicts){
+      return false;
     }
 
+    var complete = true;
+    var boxes = this.get('boxes');
+    _.forEach(boxes, function(row){
+      _.forEach(row, function(box){
+        var value = box.get('value');
+        if (value === ''){
+          complete = false;
+        }
+      });
+    });
+
+    if(complete){
+      return true;
+    }
+    return false;
+  },
+
+  won: function(){
+    this.trigger('won');
+  },
+
+  clearBoxes: function(){
+    var boxes = this.get('boxes');
+    _.forEach(boxes, function(row){
+      _.forEach(row, function(box){
+        box.set('value', '');
+      });
+    });
   }
 });
 
