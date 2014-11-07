@@ -1,14 +1,100 @@
+$blue: #1fbad6;
+
 body {
   width:100%;
   height:100%;
+  background:
+  url(https://d1a3f4spazzrp4.cloudfront.net/web-fresh/pattern-grid@1x.jpg)
+  repeat left top;
+  background-size: 18px 18px;
+}
+
+@mixin center() {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+header {
+  width: 100%;
+  text-align:center;
+}
+
+
+.sudoku {
+  @include center();
+}
+
+.game {
+  @include center();
+}
+
+.sudoku-grid {
+  @include center();
+  border: 5px solid $blue;
+  background-color: #fff;
+  border-collapse: collapse;
 }
 
 .sudoku-box {
-  border-width: 2px;
-  border-color: black;
-  background-color: blue;
+  margin: 0px;
+  padding: 0px;
+  border: 1px solid black
 }
 
-.conflict {
-  background-color: red;
+// remove borders of cells that are on exterior of grid
+.sudoku-grid tr:first-child {
+  border-top: 0;
+}
+
+.sudoku-grid tr:last-child td {
+  border-bottom: 0;
+}
+.sudoku-grid tr td:first-child {
+  border-left: 0;
+}
+.sudoku-grid tr td:last-child{
+  border-right: 0;
+}
+
+//add demarcation of quadrants
+.sudoku-grid tr:nth-child(3n) td {
+  border-bottom: 3px solid black;
+}
+
+.sudoku-grid tr td:nth-child(3n) {
+  border-right: 3px solid black;
+}
+
+.sudoku-box-input {
+  text-align: center;
+  margin:0px;
+  padding:none;
+  border: none;
+  background: none;
+  font-size: 16px;
+}
+
+.sudoku-box-input:focus {
+  outline:none;
+}
+
+.conflict{
+  background-color: rgba(255,0,0,0.4);
+}
+
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.new-game {
+  @include center();
+  display:block;
+  margin-top: 16px;
+  font-size: 28px;
+  border-radius: 0px;
+  border:none;
+  background-color: $blue;
 }
