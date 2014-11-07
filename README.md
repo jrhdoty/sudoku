@@ -1,7 +1,7 @@
 Sudoku
 =======
 ##Description
-An implementation of the classic game of Sudoku.
+An implementation of the classic game of Sudoku.  [Demo it here!](http://jrhdoty.github.io/sudoku)
 
 ##Technologies Used
 - Javascript/CSS/HTML
@@ -30,12 +30,12 @@ This model contains a Grid and has functions for indicating that a game has been
 ###Application Views
 Each of the above models has an associated view.  The view has a render function for updating dom elements with data from its associated model.  It also acts as a controller, listening for user input and updating its model accordingly.
 
-###Testing
+##Testing
 I created unit tests for most components of this application to ensure all of the components worked in isolation.  This allowed me to quickly update elements of the program while having confidence I was not making breaking changes. I used Mocha as my testing framework and Chai as my assertion library.  Karma was used for running the tests.  
 
 Karma is especially useful when running tests for an application that is built with browserify because it allows for the pre-processing of test and application files with browserify before running tests.
 
-###Build System
+##Build System
 Gulp was used for performing all of the build and debugging tasks for this application including:
 - linting
 - injecting scripts/styles into the index.html
@@ -44,5 +44,5 @@ Gulp was used for performing all of the build and debugging tasks for this appli
 - running karma
 - and watching for file changes
 
-###Styling
+##Styling
 Styles were written with SASS to allow for the use of mixins and variables and compiled to css with a gulp sass task
